@@ -1,0 +1,194 @@
+body {
+    font-family: "Raleway", sans-serif, Arial;
+    background-color: #1b1b34;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+    overflow: hidden; /* Prevent scrolling if unnecessary */
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0; /* Ensures it's behind the content */
+    background: url(img/rocco-dipoppa-unsplash.jpg) no-repeat center center/cover;
+    opacity: 0.7; /* Adjust transparency for the background image */
+}
+
+body::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(27, 27, 52, 0.7); /* Add a transparent overlay */
+    z-index: 1; /* Stays behind the content but above the image */
+}
+
+    
+
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+
+    #header {
+        height: 90px;
+        padding: 25px 0;
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        transition: all 0.5s;
+        z-index: 997;
+    }
+    
+    #header #logo h1 span {
+        color: #f82249;
+    }
+    
+    #header #logo img {
+        position:relative;
+        padding: 0;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+        margin-bottom: 30px;
+        display: block;
+        max-height: 80px;
+    }
+    
+    .form-box-container {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 400px;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-height: 450px;  /* Limit the form container's height */
+        overflow-y: auto;  /* Enable vertical scrolling if the content overflows */
+    }
+    
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .form-toggle {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .form-toggle button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
+    .form-toggle button:hover {
+        background-color: #0056b3;
+    }
+    
+    .form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .form.hidden {
+        display: none;
+    }
+    
+    form h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    form input, form select, form button {
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    
+    form button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    
+    form button:hover {
+        background-color: #218838;
+    }
+    
+
+/*----------Sections Header-------------*/
+    .section-header {
+        margin-bottom: 60px;
+        position: relative;
+        padding-bottom: 20px;
+    }
+    
+    .section-header::before {
+        content: '';
+        position: absolute;
+        display: block;
+        width: 60px;
+        height: 5px;
+        background: #f82249;
+        bottom: 0;
+        left: calc(50% - 25px);
+    }
+    
+    .section-header h2 {
+        font-size: 36px;
+        text-transform: uppercase;
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .section-header p {
+        text-align: center;
+        padding: 0;
+        margin: 0;
+        font-size: 18px;
+        font-weight: 500;
+        color: #9195a2;
+    }
+    
+    .section-with-bg {
+        background-color: #f6f7fd;
+    }
+
+    #footer {
+        z-index: 15;
+        background: #101522;
+        padding: 0 0 25px 0;
+        color: #eee;
+        font-size: 14px;
+        bottom: 0%;
+        position: fixed;
+        width: 100%;
+    }
+
+    #footer .copyright {
+        text-align: center;
+        padding-top: 30px;
+      }

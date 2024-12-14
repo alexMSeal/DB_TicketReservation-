@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800" rel="stylesheet">
+
+    <!-- Main Stylesheet File -->
+    <link href="login-decor.css" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+    <title>SpaceTix Login</title>
+</head>
+<body>
+    <div class="background-cover">
+        <header id="header">
+            <div class="container">
+                <div id="logo" class="pull-left">
+                    <a href="../index.html" class="scrollto">
+                        <img src="../img/spacetix logo.png" alt="" title="">
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="form-box-container">
+            <div class="form-container">
+                <div class="form-toggle">
+                    <h2>No account? Create a new one!</h2>
+                    <button id="register-btn">Register</button>
+                </div>
+    
+                <!-- Login Form -->
+                <form id="login-form" class="form">
+                    <h2>Log into your account</h2>
+                    <label for="login-role">Role:</label>
+                    <select id="login-user-type" name="role">
+                        <option value="attendee">Attendee</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <input type="email" id="login-email" placeholder="Email" required />
+                    <input type="password" id="login-password" placeholder="Password" required />
+                    <button type="submit">Login</button>
+                </form>
+    
+                <!-- Registration Form -->
+                <form id="register-form" class="form hidden">
+                    <h2>Register</h2>
+                    <label for="register-role">Role:</label>
+                    <select id="register-user-type" name="role">
+                        <option value="attendee">Attendee</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <input type="text" id="register-name" placeholder="Username" required />
+                    <input type="email" id="register-email" placeholder="Email" required />
+                    <div class="password-container">
+                        <input type="password" id="register-password" placeholder="Password" required />
+                        <input type="password" id="confirm-password" placeholder="Confirm Password" required />
+                        <button type="button" id="toggle-password" style="background-color: orange;">Show</button>
+                    </div>
+                    <button type="submit">Register</button>
+                    <button type="button" id="back-to-login-btn">Back to Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer id="footer">
+        <div class="container">
+            <div class="copyright">
+                &copy; Copyright <strong>SpaceTix</strong> 2024. All Rights Reserved
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Show/Hide Password Toggle
+        const togglePasswordBtn = document.getElementById('toggle-password');
+        const passwordField = document.getElementById('register-password');
+        const confirmPasswordField = document.getElementById('confirm-password');
+
+        togglePasswordBtn.addEventListener('click', function () {
+            const type = passwordField.type === 'password' ? 'text' : 'password';
+            passwordField.type = type;
+            confirmPasswordField.type = type;
+            togglePasswordBtn.textContent = type === 'password' ? 'Show' : 'Hide';
+        });
+
+        // Toggle between Login and Registration forms
+        const loginFormElement = document.getElementById('login-form');
+        const registerFormElement = document.getElementById('register-form');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const backToLoginBtn = document.getElementById('back-to-login-btn');
+
+        registerBtn.addEventListener('click', function () {
+            loginFormElement.classList.add('hidden');
+            registerFormElement.classList.remove('hidden');
+        });
+
+        backToLoginBtn.addEventListener('click', function () {
+            registerFormElement.classList.add('hidden');
+            loginFormElement.classList.remove('hidden');
+        });
+
+        // Handle Registration Form Submission
+        const registerForm = document.getElementById('register-form');
+        registerForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get form values
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value.trim();
+            const confirmPassword = document.getElementById('confirm-password').value.trim();
+            const userType = document.getElementById('register-user-type').value;
+
+            // Validate inputs
+            if (!name || !email || !password) {
+                alert("All fields are required.");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/createUser', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password,
+                        user_type: userType,
+                    }),
+                });
+
+                if (response.status === 201) {
+                    alert("Registration successful! You can now log in.");
+                    registerForm.reset();
+                    registerForm.classList.add('hidden');
+                    loginFormElement.classList.remove('hidden');
+                } else if (response.status === 409) {
+                    alert("User already exists. Please try again with a different email or username.");
+                } else {
+                    alert("Something went wrong during registration. Please try again later.");
+                }
+            } catch (error) {
+                console.error("Error during registration:", error);
+                alert("There was an error with the registration. Please try again.");
+            }
+        });
+
+        // Handle Login Form Submission
+        const loginForm = document.getElementById('login-form');
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get form values
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+
+            if (!email || !password) {
+                alert("Email and password are required.");
+                return;
+            }
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email,  // Ensure this matches the backend parameter name
+                        password,
+                    }),
+                });
+
+                const result = await response.json();
+
+                if (response.status === 200) {
+                    alert(`${result.message}`);
+                    localStorage.setItem('user_id', result.user_id);
+                    localStorage.setItem('user_email', result.user_email);
+                    localStorage.setItem('user_type', result.user_type);
+
+                    if (result.user_type === 'admin') {
+                        window.location.href = '/admin-dashboard';
+                    } else {
+                        window.location.href = '/index.html';
+                    }
+                } else if (response.status === 401) {
+                    alert("Password incorrect!");
+                } else if (response.status === 404) {
+                    alert("User not found.");
+                } else {
+                    alert("Something went wrong during login. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error during login:", error);
+                alert("There was an error with the login. Please try again.");
+            }
+
+            console.log("login success");
+        });
+
+
+        // Fetch Protected Resource
+        async function fetchProtectedResource(url) {
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                alert('You must log in first!');
+                return;
+            }
+
+            try {
+                const response = await fetch(url, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Protected Resource:', data);
+                    return data;
+                } else {
+                    if (response.status === 401) {
+                        alert('Your session has expired. Please log in again.');
+                    } else {
+                        alert('Failed to fetch the resource.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching protected resource:', error);
+            }
+        }
+
+    </script>
+</body>
+</html>
